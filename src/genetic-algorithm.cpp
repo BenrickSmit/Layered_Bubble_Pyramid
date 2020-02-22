@@ -48,84 +48,96 @@ GeneticAlgorithm::~GeneticAlgorithm(){
 
 void GeneticAlgorithm::generate_solutions(){
         // Variable
-        const int TOTAL_NUMBER_SOLUTIONS = 1000;            // Total number of solutions to generate
-        const long long TOTAL_NUMBER_TEST_RUNS = 100000;    // Total number of test-runs before force-closure of program
-        long long total_new_solutions_generated = 0;
-        long long solution_generator_counter = 0;
-        std::vector<std::vector<int>> partial_fit;          // Will contain any data that has partial matches
-        std::vector<int> temp_solution;                     // Will contain one potential solution for use with tester
+        const long long TOTAL_NUMBER_TEST_RUNS = 100000;           // How many total loops to expect
+        const long long TOTAL_NUM_GENERATIONS = 1000;               // How many random vectors need to be created
+        long long solution_generator_counter = 0;                   // How many solution loops were generated near the end (while loops)
+        long long total_new_solutions_generated = 0;                // How many individual possibilities were generated
+        std::vector<std::vector<int>> partial_fit_solutions;        // Store vectors that fit the criteria partially
+        std::vector<std::vector<int>> full_solutions;               // Store vectors that match perfectedly
+        std::vector<std::vector<int>> possible_solutions;           // solutions that are randomly generated
+        std::vector<int> temp_solution;                             // Contains a solution for temporary use
+        std::vector<int> partial_generation;                       // Contains only a part of the solution necessary
 
-        //Clear the vector of possible solutions to make running it effective
+
+        // Generate the required information until TOTAL_NUM_TEST_RUNS has been fulfilled
         m_num_charts.clear();
-
-        // Generate potential solutions until a solution has been found
+        partial_generation.clear();
+        full_solutions.clear();
+        possible_solutions.clear();
+        temp_solution.clear();
+        partial_generation.clear();
         while (solution_generator_counter < TOTAL_NUMBER_TEST_RUNS){
-                // Should m_num_charts not be empty due to partial_fit setting some values
-                // as potential solutions, determine how much needs to be regenerated, and regenerate
-                // the data
-                if (!m_num_charts.empty()){
-                        // Test the potential solutions currently available, and remove the unnecessary parts
-                        for (auto counter = 0; counter < m_num_charts.size(); counter ++){
-                                temp_solution = m_num_charts.at(counter);
-                                std::vector<int> partial_solution;
+                // Cycle through the partial fits and determine how many elements need to be regenerated
+                // IF it contains any data
+                if (!partial_fit_solutions.empty()){
+                        // Find out how many new elements need to be generated that don't fit the tests
+                        for(auto counter = 0; counter < partial_fit_solutions.size(); counter++){
+                                temp_solution = partial_fit_solutions.at(counter);
+                                LayeredChartTest partial_fit_tester(temp_solution, get_total_num_chart_elements(),
+                                                                    get_topmost_num_elements(), m_use_unique_numbers);
 
-                                // Determine how many values you should regenerate
-                                LayeredChartTest chart_test(temp_solution, get_total_num_chart_elements(), get_topmost_num_elements(), m_use_unique_numbers);
-                                int number_elements_to_remove = num_elements_to_remove(get_topmost_num_elements(), chart_test.get_num_layers_match());
-                                temp_solution = remove_elements(temp_solution, number_elements_to_remove);
-                                partial_solution = generate_chart_data(number_elements_to_remove, get_max_allowed_value(), get_min_allowed_value());
+                                // Test the solution - the solution already failed thus why it's here
+                                if (!partial_fit_tester.test_layered_chart()){
+                                        // Remove the data in the vector that doesn't match the test result and generate new data
+                                        auto num_layers_matched = partial_fit_tester.get_num_layers_match();
+                                        auto num_elements_to_generate = num_elements_to_remove(get_topmost_num_elements(), num_layers_matched);
+                                        temp_solution = remove_elements(temp_solution, num_elements_to_generate);
+                                        partial_generation = generate_chart_data(num_elements_to_generate, get_max_allowed_value(), get_min_allowed_value());
 
-                                // Append the new data to the temporary solution
-                                //for(auto number: partial_solution){
-                                        //temp_solution.push_back(number);
-                                //}// end of for loop
-                                temp_solution.insert(temp_solution.end(), partial_solution.begin(), partial_solution.end());
+                                        // Combine the two lists and reset the data
+                                        temp_solution.insert(temp_solution.end(), partial_generation.begin(), partial_generation.end());
+                                        partial_fit_solutions[counter] = temp_solution;
 
-                                //Reinsert the element at the current locus for later testing
-                                m_num_charts[counter] = temp_solution;
-                                total_new_solutions_generated++;
-                        }// end of for loop
+                                        // Increment the number of generations made
+                                        total_new_solutions_generated++;
+                                }// end of if
+                        }// end of for
                 }// end of if
 
-                // Generate solutions until they match TOTAL_NUMBER_SOLUTIONS, should partial data
-                // have left any solutions  in m_num_chart generate only the number you need to have
-                // TOTAL_NUMBER_SOLUTIONS
-                for(auto counter = m_num_charts.size(); counter < TOTAL_NUMBER_SOLUTIONS; counter++){
-                        // Generate a possible solution and add it to m_num_charts
-                        m_num_charts.push_back(generate_chart_data(get_total_num_chart_elements(), get_max_allowed_value(), get_min_allowed_value()));
+                // Generate new vectors such that possible_solutions == TOTAL_NUM_GENERATIONS after the addition
+                // of any partial_fit_solutions, should it exist
+                // Should there be any data to add from the partial solutions
+                possible_solutions.clear();
+                if(!partial_fit_solutions.empty()){
+                        possible_solutions.insert(possible_solutions.end(), partial_fit_solutions.begin(),
+                                                  partial_fit_solutions.end());
+                        partial_fit_solutions.clear();
+                }// end of if
+                // Generate the required data but only as much as is required to reach TOTAL_NUM_GENERATIONS
+                auto new_size = (possible_solutions.empty() ? 0:possible_solutions.size()-1);
+                for (auto counter = new_size; counter < TOTAL_NUM_GENERATIONS; counter++){
+                        temp_solution = generate_chart_data(get_total_num_chart_elements(), get_max_allowed_value(), get_min_allowed_value());
+                        possible_solutions.push_back(temp_solution);
                         total_new_solutions_generated++;
                 }// end of for loop
 
-                // Test Solutions adding any with a partial fit or full fit to partial_fit.
-                partial_fit.clear();
-                for (auto counter = 0; counter < TOTAL_NUMBER_SOLUTIONS; counter++){
-                        // Retrieve a potential solution and test it's fitness
-                        temp_solution = m_num_charts.at(counter);
-                        LayeredChartTest chart_test(temp_solution, get_total_num_chart_elements(), get_topmost_num_elements(), m_use_unique_numbers);
 
-                        //Determine whether there is a complete match, or only partial match
-                        if (chart_test.test_layered_chart()){
+                // Test the solutions and narrow them down into partial_fit_solutions, and full_solutions
+                for(std::vector<int> possible_solution : possible_solutions){
+                        LayeredChartTest possible_solution_tester(possible_solution, get_total_num_chart_elements(),
+                                                                  get_topmost_num_elements(), m_use_unique_numbers);
+
+                        // Test full solutions and partial solutions. Ignore outright failures
+                        if (possible_solution_tester.test_layered_chart()){
+                                full_solutions.push_back(possible_solution);
                                 set_has_solution(true);
-                                partial_fit.push_back(temp_solution);
-                        } else{   // Not a complete match
-                                //Determine how whether one or more layers match
-                                if (chart_test.get_num_layers_match() > 0){
-                                        partial_fit.push_back(temp_solution);
-                                }//end of if
+                        } else{
+                                // Determine whether it's a total failure or whether it's only partial
+                                if (possible_solution_tester.get_num_layers_match() > 0){
+                                        partial_fit_solutions.push_back(possible_solution);
+                                }// end of if
                         }// end of if
                 }// end of for loop
 
-                // Remove m_num_charts' elements and assign partial_fit to m_num_charts
-                m_num_charts.clear();
-                m_num_charts = partial_fit;
-                partial_fit.clear();
-
-                // Increment the total number of while-loop runs
+                // Increment the loop counter
                 solution_generator_counter++;
-                trim_solutions();
 
-                if(m_num_charts.size() >= 8) break;
+                //Display the number of full solutions found
+                //std::cout << "("<< solution_generator_counter << ") : Unique Solutions: " << full_solutions.size() << " : Solutions Generated: " << total_new_solutions_generated << std::endl;
         }// end of while loop
+
+        m_num_charts = full_solutions;
+        trim_solutions();
 
         // Display more information about the solution:
         std::cout << "" << std::endl;
@@ -154,7 +166,7 @@ void GeneticAlgorithm::generate_solutions(){
                 }//end of while
 
                 std::cout << "Total Number Possible Permutations: " << total_possible_solutions << std::endl;
-        } else if (has_solution()){
+        } else {
                 std::cout << "Solution(s) Found!" << std::endl;
                 std::cout << "Found Within " << total_new_solutions_generated << " Generations" << std::endl;
         }// end of if else
