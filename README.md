@@ -14,6 +14,7 @@ Please find some screenshots of the results:
 2) [3 backmost (unique numbers)](screenshots/3_backmost_row.png)
 3) [4 backmost (non-unique numbers)](screenshots/4_backmost_row.png)
 4) [5 backmost (unique numbers)](screenshots/5_backmost_row.png)
+5) [6_backmost_(error_message)](screenshots/error.png)
 
 # LICENSE
 This program is published under the [GPLv3](COPYING) License.
