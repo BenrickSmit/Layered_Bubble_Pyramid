@@ -25,6 +25,7 @@
 #include <cmath>
 #include <ctime>
 #include <random>
+#include <algorithm>
 
 #include "layered-chart-test.h"
 
@@ -34,6 +35,10 @@ public:
 
 	// Generate the data as necessary
 	void generate_solutions();
+
+	// This function will search the total number of possible solutions
+	// for the first solution that matches 100%
+	void trim_solutions();
 
 	// This function will output the solution that fits to the screen
 	void display_solution() const;
@@ -63,11 +68,11 @@ protected:
 	// Get the number of bubbles in topmost layers
 	int get_topmost_num_elements() const;
 
-	// This function returns the layered chart for use without modification
-	std::vector<int> get_chart_solution() const;
+	// This function returns the layered charts for use without modification
+	std::vector<std::vector<int>>  get_chart_solutions() const;
 
 private:
-	std::vector<int> m_layered_chart;		  // Contains the list of values that make up the chart
+	std::vector<std::vector<int>> m_num_charts;	  // Contains the list of possible charts that satisfy test cases
 	int m_total_num_chart_elements;			  // Contains the number of chart elements
 	int m_start_number;				  // Contains the number to start with (i.e. minimum allowed integer)
 	int m_end_number;				  // Contains the number to end with (i.e. maximum allowed integer)

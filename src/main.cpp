@@ -103,7 +103,7 @@ int main(){
 
 			// Should there be a solution; display it
 			if (ga.has_solution()){
-				ga.trim_solutions();
+				//ga.trim_solutions();
 				ga.display_solution();
 			} else{
 				if (num_top_row_bubbles.at(number_of_bubbles_option) > 5){
@@ -120,6 +120,7 @@ int main(){
 
 			// Should there be a solution; display it
 			if (ra.has_solution()){
+//				//ra.trim_solutions();
 				ra.display_solution();
 			} else{
 				if (num_top_row_bubbles.at(number_of_bubbles_option) > 5){

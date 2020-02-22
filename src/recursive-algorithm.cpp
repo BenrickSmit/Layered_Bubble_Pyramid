@@ -34,10 +34,10 @@ void RecursiveAlgorithm::generate_solutions(){
         std::vector<int> starting_solution;
         std::vector<int> potential_solution;
         long long solution_generation_counter = 0;
-        const long long TOTAL_NUM_TEST_RUNS = 1000000000;
+        const long long TOTAL_NUM_TEST_RUNS = 1000000;
 
         // Continue generation until there is a solution
-        while (!has_solution()){
+        while (solution_generation_counter < TOTAL_NUM_TEST_RUNS){//(!has_solution()){
                 //Generate random numbers that are equal in number to m_top_row_num_bubbles
                 starting_solution.clear();
                 for (auto counter = 0; counter < get_topmost_num_elements(); counter++){
@@ -46,28 +46,31 @@ void RecursiveAlgorithm::generate_solutions(){
                 }// end of for loop
 
                 // Recursively generate the rest of the pattern with generate_row
-                m_layered_chart.clear();
                 potential_solution.clear();
                 generate_row(starting_solution, potential_solution);
 
-                // Return the resulting solution as a memeber variable
-                m_layered_chart = potential_solution;
-
                 // Test the solution with the LayeredChartTest class
-                LayeredChartTest chart_test(get_chart_solution(), get_total_num_chart_elements(),
+                LayeredChartTest chart_test(potential_solution, get_total_num_chart_elements(),
                                             get_topmost_num_elements(), m_use_unique_numbers);
                 if (chart_test.test_layered_chart()){
                         set_has_solution(true);
-                        break;
+                        // Return the resulting solution as a memeber variable
+                        m_num_charts.push_back(potential_solution);
                 }// end of if
 
-                // Break out of the loop if solution_generation_counter is greater than the constant value
-                if (solution_generation_counter >= TOTAL_NUM_TEST_RUNS){
-                        break;
-                }// end of if
+                //Trim the solutions to only have unique values
+                trim_solutions();
+
+                //There are a limited number of unique solutions
+                // 2 backrow = 4 unique solutions (option 1)
+                // 3 backrow = 8 unique solutions (option 2)
+                // 4 backrow = 8 unique solutions (option 3)
+                // 5 backrow = 1 unique solutions (option 4)
+                // 6 backrow = 0 unique solutions (option 5) - Error
+
                 // Increment the total number of while loop runs;
                 solution_generation_counter++;
-                //if (solution_generation_counter % 1000 == 0) std::cout << ">> " << solution_generation_counter << std::endl;
+                //if (solution_generation_counter % 1000 == 0) std::cout << ">> " << solution_generation_counter << "; solution : " << potential_solution.size() << "; m_num_charts: " << m_num_charts.size() << std::endl;
         }// end of while loop
 
         // Display more information about the solution:
@@ -95,30 +98,57 @@ void RecursiveAlgorithm::generate_solutions(){
         }// end of if
 }// end of generate_solutions()
 
+void RecursiveAlgorithm::trim_solutions() {
+          // Find the solutions out of the multitude that fits, then clear the rest
+          std::vector<int> temp_chart;
+          std::vector<std::vector<int>> solutions;       //Contains all the solutions
+          solutions.clear();
+          for (auto counter = 0; counter < m_num_charts.size(); counter++){
+                  temp_chart = m_num_charts.at(counter);
+                  LayeredChartTest test_chart(temp_chart, get_total_num_chart_elements(), get_topmost_num_elements(), m_use_unique_numbers);
+
+                  if(test_chart.test_layered_chart()){
+                          solutions.push_back(temp_chart);
+                  }//end of if
+          }// end of for
+
+          m_num_charts.clear();
+          m_num_charts = solutions;
+          solutions.clear();
+
+          //Make sure to only store different solutions - no identical solutions
+          std::sort(m_num_charts.begin(), m_num_charts.end());
+          m_num_charts.erase(std::unique(m_num_charts.begin(), m_num_charts.end()), m_num_charts.end());
+}// end of trim_solutions
+
 void RecursiveAlgorithm::display_solution() const{
-        // Variables
-        auto element_counter = 0;
-        int new_line_location = get_topmost_num_elements();
-        int counter = 0;
+  //Account for all complete solutions
+  std::cout << "" << std::endl;
+  for(std::vector<int> solution: m_num_charts){
+          //Solution Variables
+          int element_counter = 0;
+          int new_line_location = get_topmost_num_elements();
+          int counter = 0;
 
+          std::cout << "Solution:" << std::endl;
+          //Output the solution in the form of a pyramid
+          while ((element_counter < solution.size())){   // Display only elements in the list
+              std::cout << solution.at(element_counter) << " ";
 
-        //Output the solution in the form of a pyramid
-        while ((element_counter < get_chart_solution().size())){   // Display only elements in the list
-            std::cout << get_chart_solution().at(element_counter) << " ";
+              // Increment as necessary
+              counter++;
+              element_counter++;
 
-            // Increment as necessary
-            counter++;
-            element_counter++;
+              // Build a pyramid by outputting \n where necessary
+              if (counter == new_line_location){
+                      std::cout << std::endl;
+                      counter = 0;
+                      new_line_location--;
+              }// end of if
+          }// end of while
+  }// end of for loop
 
-            // Build a pyramid by outputting \n where necessary
-            if (counter == new_line_location){
-                    std::cout << std::endl;
-                    counter = 0;
-                    new_line_location--;
-            }// end of if
-        }// end of while
-
-        std::cout << std::endl;
+  std::cout << std::endl;
 }// end of display_solution()
 
 bool RecursiveAlgorithm::has_solution() const {
@@ -172,6 +202,6 @@ int RecursiveAlgorithm::get_topmost_num_elements() const{
         return m_top_row_num_bubbles;
 }// end of get_topmost_num_elements
 
-std::vector<int> RecursiveAlgorithm::get_chart_solution() const{
-        return m_layered_chart;
-}// end of get_solution
+std::vector<std::vector<int>> RecursiveAlgorithm::get_chart_solutions() const{
+        return m_num_charts;
+}// end of get_chart_solutions

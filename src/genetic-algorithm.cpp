@@ -39,7 +39,7 @@ GeneticAlgorithm::GeneticAlgorithm(int total_number_bubbles, int total_top_row_b
 void GeneticAlgorithm::generate_solutions(){
         // Variable
         const int TOTAL_NUMBER_SOLUTIONS = 1000;            // Total number of solutions to generate
-        const long long TOTAL_NUMBER_TEST_RUNS = 100000;             // Total number of test-runs before force-closure of program
+        const long long TOTAL_NUMBER_TEST_RUNS = 100000;    // Total number of test-runs before force-closure of program
         long long total_new_solutions_generated = 0;
         long long solution_generator_counter = 0;
         std::vector<std::vector<int>> partial_fit;          // Will contain any data that has partial matches
@@ -49,7 +49,8 @@ void GeneticAlgorithm::generate_solutions(){
         m_num_charts.clear();
 
         // Generate potential solutions until a solution has been found
-        while((!has_solution())){
+        while ((solution_generator_counter < TOTAL_NUMBER_TEST_RUNS) ||
+               (!has_solution())){
                 // Should m_num_charts not be empty due to partial_fit setting some values
                 // as potential solutions, determine how much needs to be regenerated, and regenerate
                 // the data
@@ -86,7 +87,7 @@ void GeneticAlgorithm::generate_solutions(){
                         total_new_solutions_generated++;
                 }// end of for loop
 
-                // Test Solutions adding any with a partial fit to partial_fit.
+                // Test Solutions adding any with a partial fit or full fit to partial_fit.
                 partial_fit.clear();
                 for (auto counter = 0; counter < TOTAL_NUMBER_SOLUTIONS; counter++){
                         // Retrieve a potential solution and test it's fitness
@@ -113,11 +114,12 @@ void GeneticAlgorithm::generate_solutions(){
 
 
                 // Determine if the number of generations has run its countse
-                if (solution_generator_counter >= TOTAL_NUMBER_TEST_RUNS){
-                        break;
-                }// end of if
+                //if (solution_generator_counter >= TOTAL_NUMBER_TEST_RUNS){
+                        //break;
+                //}// end of if
                 // Increment the total number of while-loop runs
                 solution_generator_counter++;
+                trim_solutions();
         }// end of while loop
 
         // Display more information about the solution:
@@ -133,7 +135,7 @@ void GeneticAlgorithm::generate_solutions(){
         std::cout << "" << std::endl;
 
         // Determine which condition was met
-        if(TOTAL_NUMBER_TEST_RUNS == solution_generator_counter) {
+        if((TOTAL_NUMBER_TEST_RUNS == solution_generator_counter) && (!has_solution())) {
                 std::cout << "Solution Not Found!" << std::endl;
                 std::cout << "Total Generations: " << TOTAL_NUMBER_TEST_RUNS << std::endl;
                 std::cout << "Total Number Solutions Generated: " << total_new_solutions_generated << std::endl;
@@ -148,49 +150,60 @@ void GeneticAlgorithm::generate_solutions(){
 
                 std::cout << "Total Number Possible Permutations: " << total_possible_solutions << std::endl;
         } else if (has_solution()){
-                std::cout << "Solution Found!" << std::endl;
+                std::cout << "Solution(s) Found!" << std::endl;
                 std::cout << "Found Within " << total_new_solutions_generated << " Generations" << std::endl;
         }// end of if else
 }// end of generate_solutions()
 
 void GeneticAlgorithm::trim_solutions(){
-        // Find the first solution out of the multitude that fits, then clear the rest
-        static std::vector<int> temp_chart;
+        // Find the solutions out of the multitude that fits, then clear the rest
+        std::vector<int> temp_chart;
+        std::vector<std::vector<int>> solutions;       //Contains all the solutions
+        solutions.clear();
         for (auto counter = 0; counter < m_num_charts.size(); counter++){
                 temp_chart = m_num_charts.at(counter);
-                LayeredChartTest test_chart(temp_chart, get_total_num_chart_elements(), get_topmost_num_elements());
+                LayeredChartTest test_chart(temp_chart, get_total_num_chart_elements(), get_topmost_num_elements(), m_use_unique_numbers);
 
                 if(test_chart.test_layered_chart()){
-                        break;
+                        solutions.push_back(temp_chart);
                 }//end of if
         }// end of for
 
         m_num_charts.clear();
-        m_layered_chart = temp_chart;
+        m_num_charts = solutions;
+        solutions.clear();
+
+        //Make sure to only store different solutions - no identical solutions
+        std::sort(m_num_charts.begin(), m_num_charts.end());
+        m_num_charts.erase(std::unique(m_num_charts.begin(), m_num_charts.end()), m_num_charts.end());
 }// end of trim_solutions();
 
 void GeneticAlgorithm::display_solution() const{
-        // Variables
-        int element_counter = 0;
-        int new_line_location = get_topmost_num_elements();
-        int counter = 0;
+        //Account for all complete solutions
+        std::cout << "" << std::endl;
+        for(std::vector<int> solution: m_num_charts){
+                //Solution Variables
+                int element_counter = 0;
+                int new_line_location = get_topmost_num_elements();
+                int counter = 0;
 
+                std::cout << "Solution:" << std::endl;
+                //Output the solution in the form of a pyramid
+                while ((element_counter < solution.size())){   // Display only elements in the list
+                    std::cout << solution.at(element_counter) << " ";
 
-        //Output the solution in the form of a pyramid
-        while ((element_counter < m_layered_chart.size())){   // Display only elements in the list
-            std::cout << m_layered_chart.at(element_counter) << " ";
+                    // Increment as necessary
+                    counter++;
+                    element_counter++;
 
-            // Increment as necessary
-            counter++;
-            element_counter++;
-
-            // Build a pyramid by outputting \n where necessary
-            if (counter == new_line_location){
-                    std::cout << std::endl;
-                    counter = 0;
-                    new_line_location--;
-            }// end of if
-        }// end of while
+                    // Build a pyramid by outputting \n where necessary
+                    if (counter == new_line_location){
+                            std::cout << std::endl;
+                            counter = 0;
+                            new_line_location--;
+                    }// end of if
+                }// end of while
+        }// end of for loop
 
         std::cout << std::endl;
 }// end of display_solution

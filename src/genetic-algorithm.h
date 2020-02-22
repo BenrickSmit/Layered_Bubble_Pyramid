@@ -24,6 +24,7 @@
 #include <iostream>
 #include <ctime>
 #include <random>
+#include <algorithm>
 
 #include "layered-chart-test.h"
 
@@ -79,8 +80,7 @@ protected:
 	// Remove a number of elements from the back of the vector
 	std::vector<int> remove_elements(std::vector<int> chart, int num_elements_remove = 0);
 private:
-	std::vector<std::vector<int>> m_num_charts;	// Contains a list of charts
-	std::vector<int> m_layered_chart;		// Contains the chart data
+	std::vector<std::vector<int>> m_num_charts;	// Contains a list of charts that satisfy the requirements
 	int m_total_num_chart_elements;			// Contains the number of chart elements
 	int m_start_number;				// Contains the number to start with (i.e. minimum allowed integer)
 	int m_end_number;				// Contains the number to end with (i.e. maximum allowed integer)
