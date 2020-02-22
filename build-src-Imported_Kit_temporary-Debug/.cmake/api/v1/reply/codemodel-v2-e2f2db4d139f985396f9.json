@@ -1,0 +1,59 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "Layered_Bubble_Pyramid",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "LayeredBubblePyramid::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-LayeredBubblePyramid-Debug-e0e70859453bf7a5e70a.json",
+					"name" : "LayeredBubblePyramid",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/gary/Documents/Coding/C++/Layered_Bubble_Pyramid/build-src-Imported_Kit_temporary-Debug",
+		"source" : "/home/gary/Documents/Coding/C++/Layered_Bubble_Pyramid/src"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 0
+	}
+}

@@ -120,6 +120,18 @@ void GeneticAlgorithm::generate_solutions(){
                 solution_generator_counter++;
         }// end of while loop
 
+        // Display more information about the solution:
+        std::cout << "" << std::endl;
+        std::cout << "============================================" << std::endl;
+        std::cout << "Method: Genetic Algorithm" << std::endl;
+        std::cout << "" << std::endl;
+        std::cout << "A Genetic Algorithm uses the principles of " << std::endl;
+        std::cout << "evolution to iterativesly find a solution that" << std::endl;
+        std::cout << "fits a number of criteria to create a solution" << std::endl;
+        std::cout << "that is fit enough to survive the tests." << std::endl;
+        std::cout << "============================================" << std::endl;
+        std::cout << "" << std::endl;
+
         // Determine which condition was met
         if(TOTAL_NUMBER_TEST_RUNS == solution_generator_counter) {
                 std::cout << "Solution Not Found!" << std::endl;

@@ -70,6 +70,22 @@ void RecursiveAlgorithm::generate_solutions(){
                 //if (solution_generation_counter % 1000 == 0) std::cout << ">> " << solution_generation_counter << std::endl;
         }// end of while loop
 
+        // Display more information about the solution:
+        std::cout << "" << std::endl;
+        std::cout << "============================================" << std::endl;
+        std::cout << "Method: Recursive Algorithm" << std::endl;
+        std::cout << "" << std::endl;
+        std::cout << "A Recursive Algorithm uses the same function" << std::endl;
+        std::cout << "to calculate smaller and smaller parts of the " << std::endl;
+        std::cout << "triangle while trying to meet certain " << std::endl;
+        std::cout << "conditions. It contains a base case which " << std::endl;
+        std::cout << "returns the algorithm and stops it from further" << std::endl;
+        std::cout << "execution, while still accounting for a normal" << std::endl;
+        std::cout << "conditional case which breaks the problem up into" << std::endl;
+        std::cout << "smaller individual problems of the same nature." << std::endl;
+        std::cout << "============================================" << std::endl;
+        std::cout << "" << std::endl;
+
         if (!has_solution() || (solution_generation_counter == TOTAL_NUM_TEST_RUNS)){
                 std::cout << "Solution Not Found!" << std::endl;
                 std::cout << "Total Number Generations: " << solution_generation_counter << std::endl;
