@@ -33,12 +33,13 @@ GeneticAlgorithm::GeneticAlgorithm(int total_number_bubbles, int total_top_row_b
 
         // Seed the random number generator
         srand(time(0));
+        set_has_solution(false);
 }// end of constructor
 
 void GeneticAlgorithm::generate_solutions(){
         // Variable
         const int TOTAL_NUMBER_SOLUTIONS = 1000;            // Total number of solutions to generate
-        const long long TOTAL_NUMBER_TEST_RUNS = 1000000;             // Total number of test-runs before force-closure of program
+        const long long TOTAL_NUMBER_TEST_RUNS = 100000;             // Total number of test-runs before force-closure of program
         long long total_new_solutions_generated = 0;
         long long solution_generator_counter = 0;
         std::vector<std::vector<int>> partial_fit;          // Will contain any data that has partial matches

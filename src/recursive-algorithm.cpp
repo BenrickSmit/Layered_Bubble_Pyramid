@@ -26,6 +26,7 @@ RecursiveAlgorithm::RecursiveAlgorithm(int total_number_bubbles, int total_top_r
  {
         // Seed the random number generator
         srand(time(0));
+        set_has_solution(false);
 }// end of constructor
 
 void RecursiveAlgorithm::generate_solutions(){
@@ -33,7 +34,7 @@ void RecursiveAlgorithm::generate_solutions(){
         std::vector<int> starting_solution;
         std::vector<int> potential_solution;
         long long solution_generation_counter = 0;
-        const long long TOTAL_NUM_TEST_RUNS = 1000000;
+        const long long TOTAL_NUM_TEST_RUNS = 1000000000;
 
         // Continue generation until there is a solution
         while (!has_solution()){
@@ -45,6 +46,8 @@ void RecursiveAlgorithm::generate_solutions(){
                 }// end of for loop
 
                 // Recursively generate the rest of the pattern with generate_row
+                m_layered_chart.clear();
+                potential_solution.clear();
                 generate_row(starting_solution, potential_solution);
 
                 // Return the resulting solution as a memeber variable
@@ -55,6 +58,7 @@ void RecursiveAlgorithm::generate_solutions(){
                                             get_topmost_num_elements(), m_use_unique_numbers);
                 if (chart_test.test_layered_chart()){
                         set_has_solution(true);
+                        break;
                 }// end of if
 
                 // Break out of the loop if solution_generation_counter is greater than the constant value

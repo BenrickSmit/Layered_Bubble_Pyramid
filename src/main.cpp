@@ -239,8 +239,11 @@ void reason_for_failure(){
 	std::cout << "where k is the total number of values in the backmost row of the " << std::endl;
 	std::cout << "triangle and n is the total number of values available." << std::endl;
 	std::cout << "" << std::endl;
-	std::cout << "Exact Difference Triangles are only possible where k < 6" << std::endl;
+	std::cout << "Exact Difference Triangles are only possible where k <= 5" << std::endl;
 	std::cout << "as the rule for a solution generally holds when n % 4 == 0 or n % 4 == 3." << std::endl;
 	std::cout << "Should the rule hold you can expect at least four unique" << std::endl;
 	std::cout << "solutions." << std::endl;
+	std::cout << "Where k > 5, there are no unique solutions, but there are" << std::endl;
+	std::cout << "non-unique solutions." << std::endl;
+	std::cout << "" << std::endl;
 }// end of reason_for_failure
