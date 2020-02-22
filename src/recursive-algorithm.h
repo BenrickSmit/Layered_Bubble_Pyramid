@@ -32,6 +32,7 @@
 class RecursiveAlgorithm{
 public:
 	RecursiveAlgorithm(int total_number_bubbles, int total_top_row_bubbles, bool use_unique_numbers = false);
+	~RecursiveAlgorithm();
 
 	// Generate the data as necessary
 	void generate_solutions();

@@ -12,15 +12,19 @@ Please find some screenshots of the results:
 
 Genetic Algorithm:
 1) [2 backmost (unique numbers)](screenshots/2_backmost_row_genetic.png)
-2) [3 backmost (unique numbers)](screenshots/3_backmost_row_genetic.png)
-3) [4 backmost (unique numbers)](screenshots/4_backmost_row_genetic.png)
+2) [3 backmost (unique numbers)_part1](screenshots/3_backmost_row_genetic_part1.png)
+   [3 backmost (unique numbers)_part2](screenshots/3_backmost_row_genetic_part2.png)
+3) [4_backmost_(unique_numbers)_part1](screenshots/4_backmost_row_genetic_part1.png)
+   [4_backmost_(unique_numbers)_part2](screenshots/4_backmost_row_genetic_part2.png)
 4) [5 backmost (unique numbers)](screenshots/5_backmost_row_genetic.png)
 5) [6_backmost_(error_message)](screenshots/error_genetic.png)
 
 Recursive Algorithm:
 1) [2_backmost_(unique_numbers)](screenshots/2_backmost_row_recursive.png)
-2) [3_backmost_(unique_numbers)](screenshots/3_backmost_row_recursive.png)
-3) [4_backmost_(unique_numbers)](screenshots/4_backmost_row_recursive.png)
+2) [3_backmost_(unique_numbers)_part1](screenshots/3_backmost_row_recursive_part1.png)
+   [3_backmost_(unique_numbers)_part2](screenshots/3_backmost_row_recursive_part2.png)
+3) [4_backmost_(unique_numbers)_part1](screenshots/4_backmost_row_recursive_part1.png)
+   [4_backmost_(unique_numbers)_part2](screenshots/4_backmost_row_recursive_part2.png)
 4) [5_backmost_(unique_numbers)](screenshots/5_backmost_row_recursive.png)
 5) [6_backmost_(error_message)](screenshots/error_recursive.png)
 

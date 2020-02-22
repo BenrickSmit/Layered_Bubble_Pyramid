@@ -31,6 +31,7 @@
 class GeneticAlgorithm{
 public:
 	GeneticAlgorithm(int total_number_bubbles, int total_top_row_bubbles, bool use_unique_numbers = false);
+	~GeneticAlgorithm();
 
 	// This function generates 1000 solutions, checks each solution,
 	// and stops only once at least one generated solution satisfies LayeredChartTest.

@@ -36,6 +36,16 @@ GeneticAlgorithm::GeneticAlgorithm(int total_number_bubbles, int total_top_row_b
         set_has_solution(false);
 }// end of constructor
 
+GeneticAlgorithm::~GeneticAlgorithm(){
+        // Clean all the vectors
+        for(std::vector<int> solution : m_num_charts){
+            solution.clear();
+            solution.resize(0);
+        }// end of for
+        m_num_charts.clear();
+        m_num_charts.resize(0);
+}// end of deconstructor
+
 void GeneticAlgorithm::generate_solutions(){
         // Variable
         const int TOTAL_NUMBER_SOLUTIONS = 1000;            // Total number of solutions to generate
@@ -49,8 +59,7 @@ void GeneticAlgorithm::generate_solutions(){
         m_num_charts.clear();
 
         // Generate potential solutions until a solution has been found
-        while ((solution_generator_counter < TOTAL_NUMBER_TEST_RUNS) ||
-               (!has_solution())){
+        while (solution_generator_counter < TOTAL_NUMBER_TEST_RUNS){
                 // Should m_num_charts not be empty due to partial_fit setting some values
                 // as potential solutions, determine how much needs to be regenerated, and regenerate
                 // the data
@@ -111,15 +120,11 @@ void GeneticAlgorithm::generate_solutions(){
                 m_num_charts = partial_fit;
                 partial_fit.clear();
 
-
-
-                // Determine if the number of generations has run its countse
-                //if (solution_generator_counter >= TOTAL_NUMBER_TEST_RUNS){
-                        //break;
-                //}// end of if
                 // Increment the total number of while-loop runs
                 solution_generator_counter++;
                 trim_solutions();
+
+                if(m_num_charts.size() >= 8) break;
         }// end of while loop
 
         // Display more information about the solution:

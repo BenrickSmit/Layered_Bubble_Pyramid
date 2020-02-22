@@ -29,6 +29,16 @@ RecursiveAlgorithm::RecursiveAlgorithm(int total_number_bubbles, int total_top_r
         set_has_solution(false);
 }// end of constructor
 
+RecursiveAlgorithm::~RecursiveAlgorithm(){
+        // Clean all the vectors
+        for(std::vector<int> solution : m_num_charts){
+            solution.clear();
+            solution.resize(0);
+        }// end of for
+        m_num_charts.clear();
+        m_num_charts.resize(0);
+}// end of deconstructor
+
 void RecursiveAlgorithm::generate_solutions(){
         // Variables
         std::vector<int> starting_solution;
@@ -61,13 +71,6 @@ void RecursiveAlgorithm::generate_solutions(){
                 //Trim the solutions to only have unique values
                 trim_solutions();
 
-                //There are a limited number of unique solutions
-                // 2 backrow = 4 unique solutions (option 1)
-                // 3 backrow = 8 unique solutions (option 2)
-                // 4 backrow = 8 unique solutions (option 3)
-                // 5 backrow = 1 unique solutions (option 4)
-                // 6 backrow = 0 unique solutions (option 5) - Error
-
                 // Increment the total number of while loop runs;
                 solution_generation_counter++;
                 //if (solution_generation_counter % 1000 == 0) std::cout << ">> " << solution_generation_counter << "; solution : " << potential_solution.size() << "; m_num_charts: " << m_num_charts.size() << std::endl;
@@ -89,7 +92,7 @@ void RecursiveAlgorithm::generate_solutions(){
         std::cout << "============================================" << std::endl;
         std::cout << "" << std::endl;
 
-        if (!has_solution() || (solution_generation_counter == TOTAL_NUM_TEST_RUNS)){
+        if (!has_solution() && (solution_generation_counter == TOTAL_NUM_TEST_RUNS)){
                 std::cout << "Solution Not Found!" << std::endl;
                 std::cout << "Total Number Generations: " << solution_generation_counter << std::endl;
         } else {
