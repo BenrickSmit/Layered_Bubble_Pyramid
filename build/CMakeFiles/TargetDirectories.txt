@@ -1,3 +1,0 @@
-/home/gary/Documents/Coding/C++/Layered_Bubble_Pyramid/build/CMakeFiles/rebuild_cache.dir
-/home/gary/Documents/Coding/C++/Layered_Bubble_Pyramid/build/CMakeFiles/LayeredBubblePyramid.dir
-/home/gary/Documents/Coding/C++/Layered_Bubble_Pyramid/build/CMakeFiles/edit_cache.dir

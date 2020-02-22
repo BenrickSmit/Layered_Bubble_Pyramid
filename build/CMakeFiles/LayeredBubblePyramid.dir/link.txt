@@ -1,1 +1,0 @@
-/usr/lib64/ccache/c++   -Wall -Wextra   -rdynamic CMakeFiles/LayeredBubblePyramid.dir/main.cpp.o CMakeFiles/LayeredBubblePyramid.dir/genetic-algorithm.cpp.o CMakeFiles/LayeredBubblePyramid.dir/layered-chart-test.cpp.o CMakeFiles/LayeredBubblePyramid.dir/recursive-algorithm.cpp.o  -o LayeredBubblePyramid 
