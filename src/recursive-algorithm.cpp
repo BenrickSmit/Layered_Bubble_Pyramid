@@ -42,7 +42,7 @@ RecursiveAlgorithm::~RecursiveAlgorithm(){
 void RecursiveAlgorithm::generate_solutions(){
         // Variables
         auto total = get_total_num_chart_elements();
-        auto max_nums = ((total == 3) ? 10:((total == 6) ? (10000):(1000000)));
+        auto max_nums = ((total == 3) ? 10:((total == 6) ? (10000):(100000)));
         //max_nums = 10000;
 
         std::vector<int> starting_solution;
@@ -77,7 +77,7 @@ void RecursiveAlgorithm::generate_solutions(){
 
                 // Increment the total number of while loop runs;
                 solution_generation_counter++;
-                //if (solution_generation_counter % 1000 == 0) std::cout << ">> " << solution_generation_counter << "; solution : " << potential_solution.size() << "; m_num_charts: " << m_num_charts.size() << std::endl;
+                if (solution_generation_counter % 2 == 0) std::cout << "Generated Solutions: " << solution_generation_counter << "; Unique Solutions: " << m_num_charts.size() << std::endl;
         }// end of while loop
 
         // Display more information about the solution:

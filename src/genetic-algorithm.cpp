@@ -46,10 +46,18 @@ GeneticAlgorithm::~GeneticAlgorithm(){
         m_num_charts.resize(0);
 }// end of deconstructor
 
+void linear_display(std::vector<int> input){
+  std::cout << "[";
+  for(auto num : input ){
+    std::cout << num << " ";
+  }
+  std::cout << "]\r";
+}
+
 void GeneticAlgorithm::generate_solutions(){
         // Variable
         auto total = get_total_num_chart_elements();
-        auto max_nums = ((total == 3) ? 10:((total == 6) ? (100):(1000)));
+        auto max_nums = ((total == 3) ? 10:((total == 6) ? (100):(total == 10 ? (10000):(50000))));
         //max_nums = 100000;
 
         const long long TOTAL_NUMBER_TEST_RUNS = max_nums;           // How many total loops to expect
@@ -93,6 +101,7 @@ void GeneticAlgorithm::generate_solutions(){
                                         temp_solution.insert(temp_solution.end(), partial_generation.begin(), partial_generation.end());
                                         partial_fit_solutions[counter] = temp_solution;
                                         total_new_solutions_generated++;
+                                        //linear_display(temp_solution);
                                 } else{   // Partial Matches only
                                         full_solutions.push_back(temp_solution);
                                 }// end of if
@@ -143,7 +152,7 @@ void GeneticAlgorithm::generate_solutions(){
                 full_solutions = m_num_charts;
 
                 //Display the number of full solutions found
-                if(solution_generator_counter % 2 == 0) std::cout << "loop: " << solution_generator_counter << " UniqueSol: " << full_solutions.size() << " PartialSol: " << partial_fit_solutions.size() << " GenSol: " << possible_solutions.size() << "\r";
+                if(solution_generator_counter % 2 == 0) std::cout << "Loop: " << solution_generator_counter << "; Unique Solutions: " << full_solutions.size() << "; Partial Solutions: " << partial_fit_solutions.size() << "; Generated Solutions: " << possible_solutions.size() << "\r";
         }// end of while loop
         std::cout << std::endl;
 
