@@ -56,7 +56,7 @@ int main(){
         // EXPECTED RESULTS:
         //There are a limited number of unique solutions
         // 2 backrow = 4 unique solutions (option 1)          -> Done(Recursive, Genetic)
-        // 3 backrow = 8 unique solutions (option 2)          -> Done(Recursive, )
+        // 3 backrow = 8 unique solutions (option 2)          -> Done(Recursive, Genetic)
         // 4 backrow = 8 unique solutions (option 3)          -> Done(Recursive, )
         // 5 backrow = 2 unique solutions (option 4)          -> Done(Recursive, )
         // 6 backrow = 0 unique solutions (option 5) - Error  -> Done(Recursive, )

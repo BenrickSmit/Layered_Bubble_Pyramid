@@ -40,7 +40,7 @@ public:
 
 	// This function will search the total number of possible solutions
 	// for the first solution that matches 100%
-	void trim_solutions();
+	void trim_solutions(bool test = false);
 
 	// This function will output the solution that fits to the screen
 	void display_solution() const;
