@@ -48,7 +48,11 @@ GeneticAlgorithm::~GeneticAlgorithm(){
 
 void GeneticAlgorithm::generate_solutions(){
         // Variable
-        const long long TOTAL_NUMBER_TEST_RUNS = 10000;           // How many total loops to expect
+        auto total = get_total_num_chart_elements();
+        auto max_nums = ((total == 3) ? 10:((total == 6) ? (100):(1000)));
+        //max_nums = 100000;
+
+        const long long TOTAL_NUMBER_TEST_RUNS = max_nums;           // How many total loops to expect
         const long long TOTAL_NUM_GENERATIONS = 1000;               // How many random vectors need to be created
         long long solution_generator_counter = 0;                   // How many solution loops were generated near the end (while loops)
         long long total_new_solutions_generated = 0;                // How many individual possibilities were generated
@@ -57,8 +61,6 @@ void GeneticAlgorithm::generate_solutions(){
         std::vector<std::vector<int>> possible_solutions;           // solutions that are randomly generated
         std::vector<int> temp_solution;                             // Contains a solution for temporary use
         std::vector<int> partial_generation;                       // Contains only a part of the solution necessary
-
-        bool cheat_case = false;                                     // Cheat the algorithm by not entirely using randomness
 
         // Generate the required information until TOTAL_NUM_TEST_RUNS has been fulfilled
         m_num_charts.clear();
@@ -79,52 +81,18 @@ void GeneticAlgorithm::generate_solutions(){
 
                                 // Should either the full vector fit, or only a part of it
                                 if (!partial_success_testing.test_layered_chart()){
+                                        // Calculate the values required for the genetic algorithm
                                         auto num_layers_matched = partial_success_testing.get_num_layers_match();
+                                        auto num_elements_to_generate = num_elements_to_remove(get_topmost_num_elements(), num_layers_matched+1);
+                                        auto num_elements_to_keep = temp_solution.size() - num_elements_to_generate;
 
-                                        // Determine what option to take to improve chances
-                                        if ((cheat_case) && (num_layers_matched == 1)){  //Calculate the rest of the vector, instead of simply randomly generating the values
-                                                // How many to generate, how many to remove, and how many to calculate
-                                                auto num_elements_to_random_generate = num_elements_to_remove(get_topmost_num_elements(), num_layers_matched+2);
-                                                auto total_num_elements_to_remove = num_elements_to_remove(get_topmost_num_elements(), num_layers_matched+1);
-                                                auto total_elements_calculate = std::abs(num_elements_to_random_generate - total_num_elements_to_remove);
+                                        // Remove the unnecessary parts of the temp_solution.
+                                        temp_solution = remove_elements(temp_solution, num_elements_to_keep);
+                                        partial_generation = generate_chart_data(num_elements_to_generate, get_max_allowed_value(), get_min_allowed_value());
 
-                                                //Generate the new portion of the list && remove the parts that don't match
-                                                temp_solution = remove_elements(temp_solution, total_num_elements_to_remove);
-                                                partial_generation.clear();
-                                                partial_generation = generate_chart_data(num_elements_to_random_generate, get_max_allowed_value(), get_min_allowed_value());
-
-                                                //Caculate the necessary elements
-                                                for (auto first = 0, second = first +1; first < total_elements_calculate; first++, second++){
-                                                        auto result = (temp_solution.at(get_topmost_num_elements() + first)) - (temp_solution.at(get_topmost_num_elements() + second));
-                                                        temp_solution.push_back(std::abs(result));
-                                                }// end of for loop
-
-                                                std::cout << "LayersMatch: " << num_layers_matched << " toRandGen: " << num_elements_to_random_generate << " toRem: " << total_num_elements_to_remove << " toCalc: " << total_elements_calculate << " TempSol(Aft): " << temp_solution.size() << " genSol(Aft): " << partial_generation.size() << std::endl;
-                                                num_layers_matched++;
-                                        } else if ((num_layers_matched >= 1) && (num_layers_matched < get_topmost_num_elements())){ // What to do under normal circumstances
-                                                // Should n layers match, you want to remove the total number of elements that didn't match
-                                                // remember that if one layer matches, then gettopmost_num_elements() + get_topmost_num_elements()-1 elements match sufficiently
-                                                auto total_num_to_generate = num_elements_to_remove(get_topmost_num_elements(), num_layers_matched+1);    //+1 to account for the backmost layer as well
-
-                                                //Continue on if you need to generate zero characters
-                                                partial_generation.clear();
-                                                if (total_num_to_generate == 0) continue;
-
-                                                partial_generation = generate_chart_data(total_num_to_generate, get_max_allowed_value(), get_min_allowed_value());
-                                                std::vector<int> temp_vect = remove_elements(temp_solution, total_num_to_generate);
-                                                std::cout << "VectorReturnedSize: " << remove_elements(temp_solution, 0).size();
-                                                temp_solution.clear();
-                                                temp_solution = temp_vect;
-                                                std::cout << " tempVect: " << temp_vect.size();
-                                                std::cout << " toGen: " << total_num_to_generate << " tempSol: " << temp_solution.size() << " parGen: " << partial_generation.size() << std::endl;
-                                        }// end of if
-
-                                        //Add temp_solution back only if it's size is relevant to what is expected
                                         temp_solution.insert(temp_solution.end(), partial_generation.begin(), partial_generation.end());
-                                        if (temp_solution.size() == get_total_num_chart_elements()){
-                                                partial_fit_solutions[counter] = temp_solution;
-                                        }// end of if
-                                        temp_solution.clear();
+                                        partial_fit_solutions[counter] = temp_solution;
+                                        total_new_solutions_generated++;
                                 } else{   // Partial Matches only
                                         full_solutions.push_back(temp_solution);
                                 }// end of if
@@ -175,8 +143,7 @@ void GeneticAlgorithm::generate_solutions(){
                 full_solutions = m_num_charts;
 
                 //Display the number of full solutions found
-                //if(solution_generator_counter % 10 == 0) std::cout << "loop: " << solution_generator_counter << " UniqueSol: " << full_solutions.size() << " PartialSol: " << partial_fit_solutions.size() << " GenSol: " << possible_solutions.size() << "\r";
-                //std::cout << "("<< solution_generator_counter << ") : Unique Solutions: " << full_solutions.size() << " : Solutions Generated: " << total_new_solutions_generated << std::endl;
+                if(solution_generator_counter % 2 == 0) std::cout << "loop: " << solution_generator_counter << " UniqueSol: " << full_solutions.size() << " PartialSol: " << partial_fit_solutions.size() << " GenSol: " << possible_solutions.size() << "\r";
         }// end of while loop
         std::cout << std::endl;
 
@@ -287,7 +254,12 @@ std::vector<int> GeneticAlgorithm::generate_chart_data(int num_elements, int max
         //Generate the random data
         to_return.clear();
         for (auto counter = 0; counter < num_elements; counter++){
-                auto random_number = (rand() % max_value) + min_value;
+                //Generate random numbers, but only once, so you limit the possibility of a solution to n!, and not n^n.
+                auto random_number = 0;
+                do {
+                        random_number = (rand() % max_value) + min_value;
+                }while(((std::find(to_return.begin(), to_return.end(), random_number)) != to_return.end()) && m_use_unique_numbers);
+
                 to_return.push_back(random_number);
         }// end of for loop
 
@@ -361,6 +333,7 @@ std::vector<int> GeneticAlgorithm::remove_elements(std::vector<int> chart, int n
         // Should the num_elements_remove be > 0 && < chart.size, it's okay.
         // Should num_elements_remove > chart.size(), not okay
         // Should num_elements remove < 0, not okay.
+        to_return.clear();
         if ((num_elements_remove < 0) || (num_elements_remove >= chart.size())) {
                 return to_return;
         }// end of if

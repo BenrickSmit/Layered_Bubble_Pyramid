@@ -41,10 +41,14 @@ RecursiveAlgorithm::~RecursiveAlgorithm(){
 
 void RecursiveAlgorithm::generate_solutions(){
         // Variables
+        auto total = get_total_num_chart_elements();
+        auto max_nums = ((total == 3) ? 10:((total == 6) ? (10000):(1000000)));
+        //max_nums = 10000;
+
         std::vector<int> starting_solution;
         std::vector<int> potential_solution;
         long long solution_generation_counter = 0;
-        const long long TOTAL_NUM_TEST_RUNS = 1000000;
+        const long long TOTAL_NUM_TEST_RUNS = max_nums;
 
         // Continue generation until there is a solution
         while (solution_generation_counter < TOTAL_NUM_TEST_RUNS){//(!has_solution()){
