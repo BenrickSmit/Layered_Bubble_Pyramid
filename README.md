@@ -20,12 +20,12 @@ Recursive Algorithm:
 5) [6_backmost_(error_message)](screenshots/recursive/error_recursive.png)
 
 Genetic Algorithm:
-1) [2 backmost (unique numbers)](screenshots/genetic/2_backmost_row_genetic.png)
-2) [3 backmost (unique numbers)_part1](screenshots/genetic/3_backmost_row_genetic_part1.png), 
-   [3 backmost (unique numbers)_part2](screenshots/genetic/3_backmost_row_genetic_part2.png) 
+1) [2 backmost_(unique numbers)](screenshots/genetic/2_backmost_row_genetic.png)
+2) [3 backmost_(unique numbers)_part1](screenshots/genetic/3_backmost_row_genetic_part1.png), 
+   [3 backmost_(unique numbers)_part2](screenshots/genetic/3_backmost_row_genetic_part2.png) 
 3) [4_backmost_(unique_numbers)_part1](screenshots/genetic/4_backmost_row_genetic_part1.png), 
    [4_backmost_(unique_numbers)_part2](screenshots/genetic/4_backmost_row_genetic_part2.png)
-4) [5 backmost (unique numbers)](screenshots/genetic/5_backmost_row_genetic.png) (Not enough time (110000 loops / 240 = 458.33 minutes = 7.63 hours))
+4) [5 backmost_(unique numbers)](screenshots/genetic/5_backmost_row_genetic.png) (Not enough time (110000 loops / 240 loops per minute = 458.33 minutes = 7.63 hours))
 5) [6_backmost_(error_message)](screenshots/genetic/error_genetic.png)
 
 # LICENSE
