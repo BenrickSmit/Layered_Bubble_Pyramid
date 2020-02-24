@@ -57,7 +57,7 @@ void linear_display(std::vector<int> input){
 void GeneticAlgorithm::generate_solutions(){
         // Variable
         auto total = get_total_num_chart_elements();
-        auto max_nums = ((total == 3) ? 10:((total == 6) ? (100):(total == 10 ? (10000):(50000))));
+        auto max_nums = ((total == 3) ? 10:((total == 6) ? (100):(total == 10 ? (10000):(110000)))); //was 50000
         //max_nums = 100000;
 
         const long long TOTAL_NUMBER_TEST_RUNS = max_nums;           // How many total loops to expect
