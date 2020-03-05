@@ -77,7 +77,7 @@ protected:
 	int get_total_top_bubbles() const;
 
 	// Returns the layered chart stored in the test class
-	std::vector<int> get_layered_chart() const;
+	const std::vector<int>& get_layered_chart() const;
 
 private:
 	std::vector<int> m_layered_chart;	    // The resulting chart (as a vector) to test

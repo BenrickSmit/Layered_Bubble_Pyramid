@@ -213,10 +213,11 @@ bool LayeredChartTest::singleton_values(){
         bool con_to_return = false;
 
         // Determine whether every value only appears once in the list.
+        // This logic doesn't require O(n^2), but instead can be done in O(logn)
         for (auto i = 0; i < get_layered_chart().size(); i++){
-                for (auto j = 0; j < get_layered_chart().size(); j++){
+                for (auto j = i + 1; j < get_layered_chart().size(); j++){
                         // Make sure to not select the same index
-                        if (i != j){
+                        //if (i != j){
                                 // Determine whether any number has been used more than once
                                 auto first = get_layered_chart().at(i);
                                 auto second = get_layered_chart().at(j);
@@ -228,7 +229,7 @@ bool LayeredChartTest::singleton_values(){
                                         con_to_return = false;
                                         return con_to_return;
                                 }// end of if
-                        } // end of if
+                        //} // end of if
                 }// end of for loop
         }// end of for loop
 
@@ -243,7 +244,7 @@ int LayeredChartTest::get_total_top_bubbles() const{
         return m_top_row_bubbles;
 }// end of get_total_top_bubbles()
 
-std::vector<int> LayeredChartTest::get_layered_chart() const{
+const std::vector<int>& LayeredChartTest::get_layered_chart() const{
         return m_layered_chart;
 }// end of get_layered_chart()
 

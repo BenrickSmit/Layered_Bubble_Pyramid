@@ -3,3 +3,4 @@ Changes as of February 22, 2020:
 1) Changed program's default output to solutions with unique numbers only. This can still be changed
 2) The program now displays all solutions to the selected tringular number
 3) The program displays a basic explanation of the algorithm used to solve the problem
+4) Updated GeneticAlgorithm algorithms for efficiency
